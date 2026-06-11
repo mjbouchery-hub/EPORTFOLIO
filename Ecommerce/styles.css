@@ -187,7 +187,8 @@ LANDING
 }
 
 header {
-  height: calc(100vh - 80px);
+  min-height: calc(100vh - 80px);
+  padding-bottom: 40px;
 }
 
 .header__container {
@@ -208,10 +209,8 @@ header {
 
 .header__img--wrapper {
   padding: 20px;
-
-  /* Added this after the tutorial to 
-  show it over the wave on larger screens */
   z-index: 50;
+  max-width: 600px;
 }
 
 .container {
