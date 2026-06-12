@@ -110,7 +110,8 @@ fun MealListScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Matthew's Healthy Dinners") })
+            TopAppBar(title = { Text("Matthew's Healthy Dinners 🚀") }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onRefresh) {

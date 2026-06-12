@@ -9,11 +9,16 @@ class MealRepository(private val dao: MealDao) {
     suspend fun refreshMeals(weekTag: String) {
         try {
             val response = RetrofitClient.instance.getRandomRecipes(7, BuildConfig.SPOONACULAR_API_KEY)
-            val meals = response.recipes.map { dto ->
+            val meals = response.recipes.mapIndexed { index, dto ->
                 Meal(
                     title = dto.title,
                     imageUrl = dto.image,
-                    weekTag = weekTag
+                    weekTag = weekTag,
+                    dayOfWeek = index,
+                    readyInMinutes = dto.readyInMinutes,
+                    servings = dto.servings,
+                    ingredients = dto.extendedIngredients?.joinToString("\n") { it.original } ?: "",
+                    instructions = dto.instructions ?: ""
                 )
             }
             dao.deleteWeek(weekTag)
