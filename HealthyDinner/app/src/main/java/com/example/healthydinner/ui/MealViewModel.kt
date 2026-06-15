@@ -28,9 +28,18 @@ class MealViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun regenerate() {
+    fun regenerate(
+        quick: Boolean = false,
+        kidFriendly: Boolean = false,
+        crockpot: Boolean = false
+    ) {
         viewModelScope.launch {
-            repo.refreshMeals(weekTag)
+            repo.refreshMeals(
+                weekTag = weekTag,
+                quick = quick,
+                kidFriendly = kidFriendly,
+                crockpot = crockpot
+            )
         }
     }
 }

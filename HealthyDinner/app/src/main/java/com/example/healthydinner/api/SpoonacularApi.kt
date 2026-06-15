@@ -7,6 +7,7 @@ interface SpoonacularApi {
     @GET("recipes/random")
     suspend fun getRandomRecipes(
         @Query("number") number: Int,
-        @Query("apiKey") apiKey: String
+        @Query("apiKey") apiKey: String,
+        @Query("tags") tags: String? = null
     ): RecipeResponse
 }

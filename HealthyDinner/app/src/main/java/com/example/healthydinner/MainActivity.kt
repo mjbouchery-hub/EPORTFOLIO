@@ -70,7 +70,13 @@ class MainActivity : ComponentActivity() {
                     composable("list") {
                         MealListScreen(
                             meals = meals,
-                            onRefresh = { viewModel.regenerate() },
+                            onRefresh = { quick, kidFriendly, crockpot ->
+                                viewModel.regenerate(
+                                    quick = quick,
+                                    kidFriendly = kidFriendly,
+                                    crockpot = crockpot
+                                )
+                            },
                             onMealClick = { mealId ->
                                 navController.navigate("detail/$mealId")
                             }
@@ -101,7 +107,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MealListScreen(
     meals: List<Meal>,
-    onRefresh: () -> Unit,
+    onRefresh: (Boolean, Boolean, Boolean) -> Unit,
     onMealClick: (Int) -> Unit
 ) {
     var quickSelected by remember { mutableStateOf(false) }
@@ -110,11 +116,14 @@ fun MealListScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Matthew's Healthy Dinners 🚀") }
-            )
+            TopAppBar(title = { Text("Matthew's Healthy Dinners 🚀") })
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onRefresh) {
+            FloatingActionButton(
+                onClick = {
+                    onRefresh(quickSelected, kidFriendlySelected, crockpotSelected)
+                }
+            ) {
                 Icon(Icons.Default.Refresh, contentDescription = "Refresh")
             }
         }
