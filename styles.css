@@ -240,7 +240,7 @@ nav,
 ========================= */
 
 #about-me {
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
 }
@@ -248,6 +248,7 @@ nav,
 .about-me__info {
   display: flex;
   flex-direction: column;
+  padding: 80px 0 100px;
 }
 
 .about-me__info--container {
