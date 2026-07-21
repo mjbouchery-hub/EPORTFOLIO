@@ -13,6 +13,7 @@ class MealRepository(private val dao: MealDao) {
         crockpot: Boolean = false
     ) {
         try {
+<<<<<<< HEAD
             val tags = buildList {
                 add("main course")
                 add("dinner")
@@ -36,6 +37,10 @@ class MealRepository(private val dao: MealDao) {
             }
 
             val meals = filteredRecipes.take(7).mapIndexed { index, dto ->
+=======
+            val response = RetrofitClient.instance.getRandomRecipes(7, BuildConfig.SPOONACULAR_API_KEY)
+            val meals = response.recipes.mapIndexed { index, dto ->
+>>>>>>> 2bc7f023f944644bcbb17284d7aca3f59ea66817
                 Meal(
                     title = dto.title,
                     imageUrl = dto.image,
@@ -47,7 +52,6 @@ class MealRepository(private val dao: MealDao) {
                     instructions = dto.instructions ?: ""
                 )
             }
-
             dao.deleteWeek(weekTag)
             dao.insertAll(meals)
         } catch (e: Exception) {

@@ -116,7 +116,12 @@ fun MealListScreen(
 
     Scaffold(
         topBar = {
+<<<<<<< HEAD
             TopAppBar(title = { Text("Matthew's Healthy Dinners 🚀") })
+=======
+            TopAppBar(title = { Text("Matthew's Healthy Dinners 🚀") }
+            )
+>>>>>>> 2bc7f023f944644bcbb17284d7aca3f59ea66817
         },
         floatingActionButton = {
             FloatingActionButton(

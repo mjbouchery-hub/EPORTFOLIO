@@ -5,7 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
+<<<<<<< HEAD
 @Database(entities = [Meal::class], version = 5, exportSchema = false)
+=======
+@Database(entities = [Meal::class], version = 2, exportSchema = false)
+>>>>>>> 2bc7f023f944644bcbb17284d7aca3f59ea66817
 abstract class AppDatabase : RoomDatabase() {
     abstract fun mealDao(): MealDao
 
