@@ -1,0 +1,1 @@
+I went with movies not because it was the example my instructor provided but because it ties directly into my current project that is media organization. 

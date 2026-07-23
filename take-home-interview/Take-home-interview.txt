@@ -1,0 +1,59 @@
+Congratulations on finishing the JavaScript projects. I hope now you're starting to understand a bit about how JavaScript works. Now, it takes a normal person around three months to learn JavaScript. 
+
+So, the timeframe you're learning JavaScript, it's really short. So, if you're not understanding everything, that's okay. It's actually normal. Again, for intern and low-level junior roles, you don't need to be a JavaScript expert. 
+
+But in saying that, having a good understanding of how JavaScript works is actually really important. Not only because the better you are at JavaScript, the more you get paid, but the better you are at JavaScript, it means you can build better websites, which means you can land more jobs. 
+
+So in this project, we're going to be practicing our JavaScript skills. And the website you're looking at right now, it's actually a website that I built for a take-home interview. And this got me $80,000 to $90,000. 
+
+So it was just one stage that said, all right, take home this interview question, build this. We'll give you the API to hit, just make it look good, make it work. So I created this website you're looking at right now. 
+
+All right, nothing works like this feature has not been implemented. However, this price range works. So you can see the price is updating when I move this. Let's search for only Toyotas. All right, couldn't find anything. 
+
+Let's decrease the price range. And there we go. We see him. So before I got this interview question, honestly, I did not know how to solve it. But doing the question, it got me so much better at JavaScript. 
+
+And that's why this final project for the JavaScript question is going to be the exact same question that I did myself to get really good at JavaScript. So they're like, all right, it should take you around four hours. 
+
+I was doing it the entire weekend. I was learning JavaScript on the go. All right. I was learning how to hit APIs, how to use that data on the go. And I actually landed the job because I put in the work. 
+
+So here's what this final project is going to be. It's going to be really fun. You're going to be learning a lot. So I want you to build something very similar. So it's just going to be one page. All right. 
+
+We have a header. I like this image in the background and I like this search bar. So you can copy it. I'll actually link this website for you in the description below. Now, it actually doesn't work because the API they gave me, it's actually private and it only works in localhosts. 
+
+So when you host it, it actually doesn't work. So you can actually copy this UI that I have. All right. You can copy this background image. You can copy the nav. You can copy this title. You can copy the search bar. 
+
+All right. When you hover over the search, look how nice that looks. All right. You can copy this entire UI. Now, if you're not going to do cars, you're going to do something else. You might not need this price range. 
+
+But it will be good if you have another filter. So here's the car API. All right. But there's other APIs that you can use as well. One that I really like that I actually recommend that you should do. 
+
+It's called OMDB API. And this is actually a movie API. So if you go to omdbapi.com, again in the description, you're going to get a free API and you just need a key. So all you need to do, click API key, click free, and then just fill in your email name and just say, all right, I want to do a personal project, submit, check your email, and they'll give you an API key instantly. 
+
+And then with that API key, they're going to tell you how to use it. So it says, send all data requests to this. So I actually opened it up here. So you put your API key, and then you put ampersand. S equals, all right, so where are we getting s from? 
+
+If you're filtering by search, s is required. All right, movie search title to search for. So what I did, S equals fast. So look at this. It's giving me all the data where the title has fast in it. So fast and furious seven, fast and furious, fast five, fast and furious, two, fast, two furious. 
+
+All right, everything with fast in it. So now, if they're typed in fast over here, you want to say search results for fast. And what do you want to do? You want to get the poster. All right. They give you the images as well. 
+
+Have a look at this. They give you the images to use. Absolutely beautiful. They give you the title, the year. All right. So that's what you want to show. You want to show the title. You want to show the year. 
+
+What else do you want to show? All right, there's no price, but that's okay because we just want to practice hitting the API. So what I want to do, the end goal of your application is when you type fast in here, all right, this is what I want to happen. 
+
+You press enter or you press this search. All right, so I'm going to press enter. And obviously there's no search results for fast in cars APIs. But what I want to happen is I want you to show the first six movies that pop up. 
+
+All right. If it's three, just show three. But I want you to show the first six movies that show up. I want you to show the images. All right. The cherry on the top, I taught you how to do this. I want you to add a skeleton loading state. 
+
+So what's this project going to do for you? It's going to get everything we've learned in the previous sections. All right. Feel free to go back to see how we did it. I'm not expecting you to memorize how to do everything. 
+
+Feel free to go back. All right. How did we do it in the e-commerce? And now when you apply it on your own, that's when it's going to stick to you. So this project is super important to do. And not only that, the final project in React, it's going to extend on this project. 
+
+So this one's super important. I know I'm throwing you in the deep end, but this is really important for you to learn as fast as possible. It's also really important for you to pass the take-home exams you're going to be getting when you're applying to jobs. 
+
+If you don't want to do this project with movies and you have a strong passion for something else, for example anime, all right, head over to this URL in the description. I linked it for you. It's GitHub Public APIs. 
+
+This is a list of every single free API you can literally imagine. So have a look at this. Let's just go straight to anime. Anime API, anime DB, Anime List, Anime Chan, Anime Facts, literally everything. 
+
+All right. So if you don't want to do movies and you want to use your own API, there's millions of free APIs you can use just in here. All right. So I don't know what you like. Music. All right. Free music APIs. 
+
+You can go to YouTube. Look for ideas on YouTube. What APIs can I do for side projects? All right. You're actually not limited to movies. I just gave you one example that I would do if I was a student doing this course. 
+
+So give it your best shot and I wish you the best of luck. Hey everyone, congratulations on finishing the JavaScript projects. I hope now you're starting to understand. 
