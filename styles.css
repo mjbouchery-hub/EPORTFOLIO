@@ -466,6 +466,7 @@ nav,
   height: 100%;
   background-color: #1c1d25;
   opacity: 0;
+  pointer-events: none;
   transform: translateY(100%);
   transition: all 450ms ease;
 }
@@ -509,9 +510,27 @@ nav,
   margin: 16px 0;
 }
 
+.project__description--links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .project__description--link {
-  margin-right: 16px;
-  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.project__description--link:hover {
+  background-color: #ffffff;
+  color: #1c1d25;
 }
 
 .project__description--title,

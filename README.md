@@ -2,7 +2,7 @@
 
 Welcome to my personal developer portfolio repository.
 
-This repository showcases projects I've built while learning modern frontend web development. It demonstrates my growth from foundational HTML and CSS to responsive web applications, JavaScript, API integration, and project organization.
+This repository showcases projects I've built while developing my frontend software engineering skills. It reflects my progression from foundational HTML and CSS to responsive web applications, JavaScript, API integration, and practical problem solving.
 
 ---
 
@@ -36,20 +36,19 @@ A responsive multi-page website created during frontend coursework.
 
 ---
 
-### 💼 Take-Home Interview Project _(In Progress)_
+## 🎬 MovieScope
 
-A simulated frontend take-home interview project.
+A responsive movie search application created as a simulated frontend take-home interview project.
 
-**Planned Features**
+**Highlights**
 
-- External API integration (OMDb)
-- Dynamic search
-- Filtering
-- Responsive design
-- Loading indicators
-- Dynamic rendering
-
----
+- OMDb API integration
+- Dynamic movie search
+- Responsive layout
+- Loading states
+- Sorting functionality
+- Graceful error handling
+- Dynamic rendering with JavaScript
 
 ## Skills & Technologies
 
@@ -73,14 +72,20 @@ My goals are to:
 - Write clean, maintainable code
 - Build responsive user interfaces
 - Learn modern JavaScript development
-- Create projects that solve real-world problems
 - Continuously improve through iteration
+- Build practical software that solves real-world problems
 
 ---
 
 ## About Me
 
-I'm a frontend developer in training with a passion for building practical, user-focused applications. Every project in this repository represents another step in my journey toward becoming a professional software developer.
+I'm a developer with a background in manufacturing, networking, troubleshooting, and systems thinking who is transitioning into software development. I enjoy building practical applications that solve real-world problems while continually improving my skills through hands-on projects.
+
+## Development Philosophy
+
+I believe good software starts with understanding the problem before writing code.
+
+Rather than rushing to complete projects, I revisit and refine them as I learn new techniques. This portfolio reflects that philosophy—each project represents both a milestone in my learning and an opportunity to improve through iteration.
 
 ---
 
@@ -88,6 +93,7 @@ I'm a frontend developer in training with a passion for building practical, user
 
 **Matthew Bouchery**
 
-GitHub: _(link)_
+GitHub: https://github.com/mjbouchery-hub
 
-Portfolio: _(link once deployed)_
+Portfolio:
+https://mjbouchery-hub.github.io/EPORTFOLIO/
