@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model User {
+  id         String   @id @default(cuid())
+  supabaseUserId String   @unique
+  email      String   @unique
+  role       String   @default("USER")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profiles  Profile[]
+}
+
+model Profile {
+  id         String    @id @default(cuid())
+  name       String
+  avatar     String?   // URL to the avatar image
+  iskids     Boolean   @default(false)
+  userId     String    @unique
+  createdAt  DateTime  @default(now())
+
+  user       User      @relation(fields: [userId], references: [id])
+  myList     MyList[]
+}
+
+model Movie {
+  id               String   @id @default(cuid())
+  publicId         String   @unique // Unique identifier for the movie, can be used for public references
+  title            String
+  description      String
+  isTrending       Boolean  @default(false)
+  trailerUrl       String?  // URL to the trailer video
+  videoUrl         String?    // URL to the full movie video
+  cloudinaryId     String?  // Cloudinary public ID for the movie video
+  thumbnailUrl     String?  // URL to the thumbnail image
+  releaseDate      DateTime
+  genre            String
+  director         String
+  cast             String[]
+  duration         Int       // Duration in minutes
+  rating           Float     // Average rating
+  maturityRating   String    @default("NR") // e.g., G, PG, PG-13, R, NC-17
+  isFeatured       Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+
+  myList           MyList[]
+}
+
+model MyList {
+  id         String   @id @default(cuid())
+  profileId  String
+  movieId    String
+  addedAt    DateTime @default(now())
+
+  profiles    Profile  @relation(fields: [profileId], references: [id])
+  movie      Movie    @relation(fields: [movieId], references: [id])
+
+  @@unique([profileId, movieId]) // Ensure a user can't add the same movie to their list multiple times
+}
