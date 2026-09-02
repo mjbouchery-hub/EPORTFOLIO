@@ -85,7 +85,7 @@ function Page() {
           onSubmit={handleSubmit}
           className="p-8 bg-black/65 rounded-lg flex flex-col gap-4 w-full max-w-md"
         >
-          <h1 className="mb-4 text-2xl front-bold text-white">Sign In</h1>
+          <h1 className="mb-4 text-2xl front-bold text-white">Sign In -laptop test</h1>
         
           <div>
             <Input
