@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import { Inter, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import ContextProvider from "@/providers/ContextProvider";
+import ModalProvider from "@/providers/ModalProvider";
+import Modal from "@/components/Modal";
+import { Query } from "@tanstack/react-query";
+import QueryProvider from "@/providers/QueryProvider";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,9 +24,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", inter.className, "font-sans", geist.variable)}
+      className={cn(
+        "h-full",
+        "antialiased",
+        inter.className,
+        "font-sans",
+        geist.variable,
+      )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <ContextProvider>
+        
+          <body className="min-h-full flex flex-col">
+           <QueryProvider>
+           <ModalProvider> 
+            <main>{children}</main>
+          </ModalProvider>
+          </QueryProvider>
+          </body>
+      </ContextProvider>
     </html>
   );
 }

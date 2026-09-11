@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import axios from "axios";
 import Link from "next/link";
-import Header from "@/components/auth/header";
+import Header from "@/components/auth/Header";
 import Background from "@/components/auth/Background";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -87,7 +87,7 @@ function Page() {
         >
           <h1 className="mb-4 text-2xl front-bold text-white">Sign In</h1>
         
-          <div>
+          <div className="flex flex-col gap-1">
             <Input
               label="Email"
               type="email"
@@ -102,7 +102,7 @@ function Page() {
             )}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
             <Input
               label="Password"
               type="password"
@@ -130,7 +130,7 @@ function Page() {
             </p>
           )}
 
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" variant={"brand-primary"} className="h-12">
             {isLoading ? "Logging in..." : "Login"}
           </Button>
         </form>

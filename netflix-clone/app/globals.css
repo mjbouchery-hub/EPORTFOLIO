@@ -128,7 +128,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-white;
+    @apply bg-brand-background text-white;
   }
   html {
     @apply font-sans;

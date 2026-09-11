@@ -46,14 +46,9 @@ model Movie {
   trailerUrl       String?  // URL to the trailer video
   videoUrl         String?    // URL to the full movie video
   cloudinaryId     String?  // Cloudinary public ID for the movie video
-  thumbnailUrl     String?  // URL to the thumbnail image
-  releaseDate      DateTime
-  genre            String
-  director         String
-  cast             String[]
-  duration         Int       // Duration in minutes
-  rating           Float     // Average rating
-  maturityRating   String    @default("NR") // e.g., G, PG, PG-13, R, NC-17
+  duration         Int?      // Duration in minutes
+  releaseYear      Int?      // Year of release
+  maturityRating   String?    @default("NR") // e.g., G, PG, PG-13, R, NC-17
   isFeatured       Boolean   @default(false)
   createdAt        DateTime  @default(now())
 
