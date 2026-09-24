@@ -1,20 +1,28 @@
 "use client";
 import ModalMovies from "@/components/modals/ModalMovies";
-import React from "react";
 import { useGlobalContext } from "@/context/globalContext";
-
+import React from "react";
+import { AnimatePresence } from "motion/react";
+import MovieInfoModal from "@/components/modals/MovieInfoModal";
 
 interface Props {
   children: React.ReactNode;
 }
 
 function ModalProvider({ children }: Props) {
-    const { isModalOpen, modalKey } = useGlobalContext();
+  const { isModalOpen, modalKey } = useGlobalContext();
   return (
-  <>
-  {isModalOpen && modalKey === "add-movie" && <ModalMovies />}
-        {children}
-      </>
+    <>
+      <AnimatePresence>
+        {isModalOpen && modalKey === "add-movie" && (
+          <ModalMovies key={"add-movie"} />
+        )}
+        {isModalOpen && modalKey === "movie-info" && (
+          <MovieInfoModal key={"movie-info"} />
+        )}
+      </AnimatePresence>
+      {children}
+    </>
   );
 }
 

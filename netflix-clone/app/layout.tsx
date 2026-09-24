@@ -7,6 +7,7 @@ import ModalProvider from "@/providers/ModalProvider";
 import Modal from "@/components/Modal";
 import { Query } from "@tanstack/react-query";
 import QueryProvider from "@/providers/QueryProvider";
+import Footer from "@/components/Footer";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
            <QueryProvider>
            <ModalProvider> 
             <main>{children}</main>
+            <Footer />
           </ModalProvider>
           </QueryProvider>
           </body>

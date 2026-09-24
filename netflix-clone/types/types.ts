@@ -1,7 +1,8 @@
 export enum Role {
-  ADMIN = "ADMIN",
   USER = "USER",
+  ADMIN = "ADMIN",
 }
+
 export interface Movie {
   id: string;
   publicId: string;
@@ -22,7 +23,7 @@ export interface Movie {
 
 export interface User {
   id: string;
-  supabaseId: string;
+  supabaseUserId: string;
   email: string;
   role: Role;
   createdAt: Date;
@@ -33,7 +34,7 @@ export interface User {
 export interface Profile {
   id: string;
   name: string;
-  avatarUrl: string | null;
+  avatar: string | null;
   isKids: boolean;
   userId: string;
   createdAt: Date;
@@ -50,7 +51,6 @@ export interface MyList {
   addedAt: Date;
   profile?: Profile;
   movie?: Movie | null;
- 
 }
 
 export interface WatchHistory {
@@ -60,21 +60,34 @@ export interface WatchHistory {
   episodeId: string | null;
   progress: number;
   duration: number;
-  watchedAt: Date;
+  watched: boolean;
   lastWatchedAt: Date;
   profile?: Profile;
   movie?: Movie | null;
 }
 
+export interface MovieUpdateData {
+  title?: string;
+  description?: string;
+  thumbnailUrl?: string;
+  isTrending?: boolean;
+  videoUrl?: string;
+  duration?: number | null;
+  cloudinaryId?: string;
+  rating?: string;
+  isFeatured?: boolean;
+  releaseYear?: string;
+}
 
-export type UpdateMovie = Partial<Omit<
-Movie, 
-| "id" 
-| "createdAt"
-| "publicId" 
-| "cast"  
-| "watchHistory" 
-| "myList"
-| "genres" 
->    
->;    
+export type UpdateMovie = Partial<
+  Omit<
+    Movie,
+    | "id"
+    | "createdAt"
+    | "publicId"
+    | "cast"
+    | "watchHistory"
+    | "myList"
+    | "genres"
+  >
+>;

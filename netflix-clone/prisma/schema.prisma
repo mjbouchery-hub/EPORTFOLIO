@@ -30,7 +30,7 @@ model Profile {
   name       String
   avatar     String?   // URL to the avatar image
   iskids     Boolean   @default(false)
-  userId     String    @unique
+  userId     String    
   createdAt  DateTime  @default(now())
 
   user       User      @relation(fields: [userId], references: [id])
@@ -42,6 +42,7 @@ model Movie {
   publicId         String   @unique // Unique identifier for the movie, can be used for public references
   title            String
   description      String
+  thumbnailUrl     String?
   isTrending       Boolean  @default(false)
   trailerUrl       String?  // URL to the trailer video
   videoUrl         String?    // URL to the full movie video

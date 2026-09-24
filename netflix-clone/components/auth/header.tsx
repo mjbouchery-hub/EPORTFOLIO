@@ -15,6 +15,7 @@ function Header() {
           alt="Logo"
           width={220}
           height={80}
+          className="h-[80px] w-[220px]"
           priority={true} />
 
         <Link href={isLogin ? "/register" : "/login"}>
