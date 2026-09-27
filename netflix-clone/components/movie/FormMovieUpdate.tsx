@@ -28,7 +28,7 @@ import { getSignedThumbnailUrl } from "@/app/actions/thumbnail";
 import toast from "react-hot-toast";
 
 interface Prop {
-  handleSubmit: (data: MovieUpdateData) => void;
+  handleSubmit: (data: MovieUpdateData) => Promise<void>;
   movie?: Movie;
 }
 
@@ -117,18 +117,24 @@ function FormMovieUpdate({ handleSubmit, movie }: Prop) {
       <form
         className="p-6 rounded-lg shadow-md"
         action=""
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          handleSubmit({
-            title,
-            description,
-            rating,
-            isFeatured,
-            isTrending,
-            releaseYear,
-          });
 
-          toast.success("Movie details updated!");
+          try {
+            await handleSubmit({
+              title,
+              description,
+              rating,
+              isFeatured,
+              isTrending,
+              releaseYear,
+            });
+
+            toast.success("Movie details updated!");
+          } catch (error) {
+            console.error("Error updating movie:", error);
+            toast.error("Failed to update movie.");
+          }
         }}
       >
         <FieldGroup>

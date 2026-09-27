@@ -13,19 +13,30 @@ interface Props {
 
 function Page({ params }: Props) {
   const { movieId } = React.use(params);
-  const { mutate: updateMovie } = useUpdateMovie();
+  const { mutateAsync: updateMovie } = useUpdateMovie();
   const { data: movie, isLoading } = useFetchMovie(movieId);
 
-  const handleMovieUpdate = (data: MovieUpdateData) => {
-    const { releaseYear, rating, ...rest } = data;
+const handleMovieUpdate = async (data: MovieUpdateData): Promise<void> => {
+  const { releaseYear, rating, ...rest } = data;
 
-    updateMovie({
-      id: movieId,
-      ...rest,
-      ...(releaseYear !== undefined && { releaseYear: Number(releaseYear) }),
-      ...(rating !== undefined && { maturityRating: rating }),
-    });
-  };
+  const parsedReleaseYear =
+    releaseYear !== undefined &&
+    releaseYear !== null &&
+    `${releaseYear}`.trim() !== ""
+      ? Number(releaseYear)
+      : undefined;
+
+  await updateMovie({
+    id: movieId,
+    ...rest,
+    ...(parsedReleaseYear !== undefined
+      ? { releaseYear: parsedReleaseYear }
+      : {}),
+    ...(rating !== undefined
+      ? { maturityRating: rating }
+      : {}),
+  });
+};
 
   if (isLoading) {
     return (

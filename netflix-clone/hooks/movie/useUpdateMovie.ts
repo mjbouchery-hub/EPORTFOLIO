@@ -2,14 +2,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import type { Movie } from "@/types/types";
 
-interface UpdateMovieData {
+interface UpdateMoviePayload {
   id: string;
+  title?: string;
+  description?: string;
+  thumbnailUrl?: string;
+  videoUrl?: string;
+  cloudinaryId?: string;
+  duration?: number | null;
+  releaseYear?: number | null;
+  maturityRating?: string;
+  isFeatured?: boolean;
+  isTrending?: boolean;
 }
 
 const updateMovie = async ({
   id,
   ...data
-}: UpdateMovieData): Promise<Movie> => {
+}: UpdateMoviePayload): Promise<Movie> => {
   const response = await axios.patch(`/api/movies/${id}`, data);
   return response.data;
 };
@@ -19,8 +29,11 @@ const useUpdateMovie = () => {
 
   return useMutation({
     mutationFn: updateMovie,
-    onSuccess: () => {
+    onSuccess: (_updatedMovie, variables) => {
       queryClient.invalidateQueries({ queryKey: ["movies"] });
+      queryClient.invalidateQueries({ queryKey: ["movie", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["featured-movies"] });
+      queryClient.invalidateQueries({ queryKey: ["trending-movies"] });
     },
   });
 };
