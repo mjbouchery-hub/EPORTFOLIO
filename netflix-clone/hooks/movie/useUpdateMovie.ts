@@ -32,8 +32,8 @@ const useUpdateMovie = () => {
     onSuccess: (_updatedMovie, variables) => {
       queryClient.invalidateQueries({ queryKey: ["movies"] });
       queryClient.invalidateQueries({ queryKey: ["movie", variables.id] });
-      queryClient.invalidateQueries({ queryKey: ["featured-movies"] });
-      queryClient.invalidateQueries({ queryKey: ["trending-movies"] });
+      queryClient.invalidateQueries({ queryKey: ["featuredMovies"] });
+      queryClient.invalidateQueries({ queryKey: ["trendingMovies"] });
     },
   });
 };

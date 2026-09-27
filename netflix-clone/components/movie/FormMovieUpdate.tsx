@@ -80,18 +80,44 @@ function FormMovieUpdate({ handleSubmit, movie }: Prop) {
     setThumbnailFile(file);
     if (!file) return;
 
-    const { url } = await uploadImage(file);
-    setCurrentThumbnailUrl(url);
-    handleSubmit({ thumbnailUrl: url });
+    const previousThumbnailUrl = currentThumbnailUrl;
+
+    try {
+      const { url } = await uploadImage(file);
+      setCurrentThumbnailUrl(url);
+
+      await handleSubmit({ thumbnailUrl: url });
+
+      toast.success("Thumbnail updated!");
+    } catch (error) {
+      console.error("Error updating thumbnail:", error);
+      setCurrentThumbnailUrl(previousThumbnailUrl);
+      toast.error("Failed to update thumbnail.");
+    }
   };
 
   const handleVideoDrop = async (file: File | null) => {
     setVideoFile(file);
     if (!file) return;
-    const { url, publicId, duration } = await uploadVideo(file);
-    setCurrentVideoUrl(url);
-    setCurrentCloudinaryId(publicId);
-    handleSubmit({ videoUrl: url, cloudinaryId: publicId, duration });
+
+    const previousVideoUrl = currentVideoUrl;
+    const previousCloudinaryId = currentCloudinaryId;
+
+    try {
+      const { url, publicId, duration } = await uploadVideo(file);
+
+      setCurrentVideoUrl(url);
+      setCurrentCloudinaryId(publicId);
+
+      await handleSubmit({ videoUrl: url, cloudinaryId: publicId, duration });
+
+      toast.success("Video updated!");
+    } catch (error) {
+      console.error("Error updating video:", error);
+      setCurrentVideoUrl(previousVideoUrl);
+      setCurrentCloudinaryId(previousCloudinaryId);
+      toast.error("Failed to update video.");
+    }
   };
 
   const getVideoMidFrame = (url: string) =>
