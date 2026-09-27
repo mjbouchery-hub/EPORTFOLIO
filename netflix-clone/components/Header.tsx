@@ -29,30 +29,42 @@ const menuItems = [
 
 function Header() {
   const pathname = usePathname();
-  const { activeProfile, setActiveProfile, activeProfileId } =
+  const { activeProfile, setActiveProfile, activeProfileId, clearActiveProfile } =
     useProfileContext();
-  const { data: profiles = [] } = useFetchProfiles();
+
+  const { data: profilesData } = useFetchProfiles();
+  const profiles = Array.isArray(profilesData) ? profilesData : [];
+
   const queryClient = useQueryClient();
 
   const supabase = createClient();
   const router = useRouter();
 
   const isAdmin = useIsAdmin();
+  const [isSigningOut, setIsSigningOut] = React.useState(false);
 
   // auto select first profile if there is only one and no active profile
   useEffect(() => {
+    if (isSigningOut) return;
     if (profiles.length === 0) return;
     if (activeProfile) return;
 
     const stored = profiles.find((p) => p.id === activeProfileId);
     setActiveProfile(stored ?? profiles[0]);
-  }, [profiles, activeProfile, activeProfileId, setActiveProfile]);
+  }, [profiles, activeProfile, activeProfileId, setActiveProfile, isSigningOut]);
 
   const handleSignOut = async () => {
+    setIsSigningOut(true);
     try {
-      await supabase.auth.signOut();
-      router.push("/login");
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      await queryClient.cancelQueries();
+      queryClient.clear();
+      clearActiveProfile();
+      router.replace("/login");
     } catch (error) {
+      setIsSigningOut(false);
       console.error("Error signing out:", error);
     }
   };
@@ -173,6 +185,7 @@ function Header() {
 
             <DropdownMenuItem
               onClick={handleSignOut}
+              disabled={isSigningOut}
               className="flex items-center gap-3 px-3 py-2 rounded-sm cursor-pointer bg-transparent focus:bg-transparent hover:bg-transparent text-white focus:text-white focus:**:text-white! hover:underline"
             >
               <LogOut size={22} className="text-white/60 shrink-0" />

@@ -8,6 +8,7 @@ interface ProfileContextType {
   activeProfileId: string | null;
   setActiveProfileId: (id: string | null) => void;
   setActiveProfile: (profile: Profile) => void;
+  clearActiveProfile: () => void;
 }
 
 const STORAGE_KEY = "netflix-active-profile-id";
@@ -35,6 +36,12 @@ export const ProfileContextProvider = ({
     localStorage.setItem(STORAGE_KEY, profile.id);
   };
 
+  const clearActiveProfile = () => {
+    setActiveProfileState(null);
+    setActiveProfileId(null);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
   return (
     <ProfileContext.Provider
       value={{
@@ -43,6 +50,7 @@ export const ProfileContextProvider = ({
         activeProfileId,
         setActiveProfileId,
         setActiveProfile,
+        clearActiveProfile,
       }}
     >
       {children}

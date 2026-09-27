@@ -31,22 +31,31 @@ function CarouselNextConditional() {
 }
 
 function MoviesRow({ title, movies, prioritizeFirst = false }: Props) {
+  const safeMovies = Array.isArray(movies) ? movies : [];
+
+  if (safeMovies.length === 0) {
+    return null;
+  }
+
   return (
     <section className="relative z-0 has-data-elevated:z-10 flex flex-col gap-2 md:gap-4">
-      {movies.length > 0 && (
-        <h2 className="font-semibold text-lg md:text-2xl">{title}</h2>
-      )}
+      <h2 className="font-semibold text-lg md:text-2xl">{title}</h2>
+
       <Carousel opts={{ align: "start" }} className="ml-4">
         <CarouselContent className="gap-2">
-          {movies.map((movie, index) => (
+          {safeMovies.map((movie, index) => (
             <CarouselItem
               key={movie.id}
               className="relative basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 pl-0"
             >
-              <MovieCard movie={movie} priority={prioritizeFirst && index === 0} />
+              <MovieCard
+                movie={movie}
+                priority={prioritizeFirst && index === 0}
+              />
             </CarouselItem>
           ))}
         </CarouselContent>
+
         <CarouselPreviousConditional />
         <CarouselNextConditional />
       </Carousel>
