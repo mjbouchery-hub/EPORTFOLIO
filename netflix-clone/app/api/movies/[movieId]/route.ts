@@ -111,8 +111,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Movie not found" }, { status: 404 });
     }
 
-    await prisma.movie.delete({
-      where: { id: movieId },
+    await prisma.$transaction(async (tx) => {
+      await tx.myList.deleteMany({ where: { movieId } });
+      await tx.movie.delete({ where: { id: movieId } });
     });
 
     return NextResponse.json({ message: "Movie deleted successfully" });
