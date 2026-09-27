@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
+import { prisma } from "@/lib/prisma";
 
 export const GET = async () => {
   const supabase = await createClient();
@@ -11,6 +12,15 @@ export const GET = async () => {
 
   if (error || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const dBUser = await prisma.user.findUnique({
+    where: { supabaseUserId: user.id },
+    select: { role: true,},
+  });
+
+  if (!dBUser || dBUser.role !== "ADMIN") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const timestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds

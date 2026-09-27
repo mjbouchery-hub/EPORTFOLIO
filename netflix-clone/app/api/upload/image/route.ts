@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import type { UploadApiResponse } from "cloudinary";
 import cloudinary from "@/lib/cloudinary";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,6 +15,15 @@ export async function POST(req: NextRequest) {
     if (error || !user) {
       console.error("Error fetching authenticated user:", error);
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const dBUser = await prisma.user.findUnique({
+      where: { supabaseUserId: user.id },
+      select: { role: true },
+    });
+
+    if (!dBUser || dBUser.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
     const formData = await req.formData();
     const file = formData.get("image") as File;
