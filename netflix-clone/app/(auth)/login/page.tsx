@@ -9,6 +9,7 @@ import Link from "next/link";
 import Header from "@/components/auth/Header";
 import Background from "@/components/auth/Background";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 const schema = z.object({
@@ -22,7 +23,7 @@ function Page() {
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
 
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [error, setError] = useState("");
@@ -49,11 +50,10 @@ function Page() {
     setIsLoading(true);
 
     try {
-      const { error: signInError } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
       if (signInError) {
         setError(signInError.message);
@@ -61,9 +61,7 @@ function Page() {
       }
 
       await axios.post("/api/auth/login").catch((err) => {
-        setError(
-          err.response?.data?.message || "Failed to verify login"
-        );
+        setError(err.response?.data?.message || "Failed to verify login");
       });
 
       router.push("/");
@@ -80,40 +78,41 @@ function Page() {
       <Background />
 
       <div className="flex-1 flex items-center justify-center">
-        
-        <form 
+        <form
           onSubmit={handleSubmit}
           className="p-8 bg-black/65 rounded-lg flex flex-col gap-4 w-full max-w-md"
         >
-          <h1 className="mb-4 text-2xl front-bold text-white">Sign In</h1>
-        
+          <h1 className="mb-4 text-2xl font-bold text-white">Sign In</h1>
+
           <div className="flex flex-col gap-1">
+            <Label htmlFor="email" className="text-white/80 text-sm">
+              Email
+            </Label>
             <Input
-              label="Email"
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
 
             {fieldErrors.email && (
-              <p className="text-red-500 text-xs">
-                {fieldErrors.email}
-              </p>
+              <p className="text-red-500 text-xs">{fieldErrors.email}</p>
             )}
           </div>
 
           <div className="flex flex-col gap-1">
+            <Label htmlFor="password" className="text-white/80 text-sm">
+              Password
+            </Label>
             <Input
-              label="Password"
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
             {fieldErrors.password && (
-              <p className="text-red-500 text-xs">
-                {fieldErrors.password}
-              </p>
+              <p className="text-red-500 text-xs">{fieldErrors.password}</p>
             )}
 
             <Link
@@ -124,11 +123,7 @@ function Page() {
             </Link>
           </div>
 
-          {error && (
-            <p className="text-red-500 text-xs">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-red-500 text-xs">{error}</p>}
 
           <Button type="submit" variant={"brand-primary"} className="h-12">
             {isLoading ? "Logging in..." : "Login"}
