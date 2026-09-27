@@ -32,7 +32,7 @@ export default function Home() {
     }
   }, [featuredMovies]);
 
-   if (featuredLoading || allMoviesLoading || trendingLoading) {
+  if (featuredLoading || allMoviesLoading || trendingLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <span className="loader"></span>
@@ -78,7 +78,9 @@ export default function Home() {
               {featured?.title}
             </h1>
             <p className="u-text-shadow text-sm md:text-xl font-medium hidden lg:block">
-              {featured?.description.substring(0, 120)}...
+              {featured?.description
+                ? `${featured.description.substring(0, 120)}...`
+                : ""}
             </p>
 
             <div>
