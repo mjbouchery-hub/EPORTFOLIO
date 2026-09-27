@@ -33,7 +33,11 @@ function Header() {
     useProfileContext();
 
   const { data: profilesData } = useFetchProfiles();
-  const profiles = Array.isArray(profilesData) ? profilesData : [];
+
+const profiles = React.useMemo(
+  () => (Array.isArray(profilesData) ? profilesData : []),
+  [profilesData],
+);
 
   const queryClient = useQueryClient();
 

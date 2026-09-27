@@ -1,6 +1,6 @@
 "use client";
 import { Profile } from "@/types/types";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 interface ProfileContextType {
   activeProfile: Profile | null;
@@ -21,14 +21,11 @@ export const ProfileContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [activeProfile, setActiveProfileState] = useState<Profile | null>(null);
-  const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      setActiveProfileId(stored);
-    }
-  }, []);
+  const [activeProfileId, setActiveProfileId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem(STORAGE_KEY);
+  });
 
   const setActiveProfile = (profile: Profile) => {
     setActiveProfileState(profile);
