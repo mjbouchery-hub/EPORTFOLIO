@@ -8,7 +8,7 @@ const fetchFeaturedMovies = async () => {
 
 const useFetchFeaturedMovies = () => {
   return useQuery({
-    queryKey: ["featured-movies"],
+    queryKey: ["featuredMovies"],
     queryFn: fetchFeaturedMovies,
   });
 };
