@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, type RefObject } from "react";
 
-const useDetectOutsideClick = (
-  ref: React.RefObject<HTMLElement>,
+const useDetectOutsideClick = <T extends HTMLElement>(
+  ref: RefObject<T | null>,
   callback: () => void,
 ) => {
   useEffect(() => {
@@ -11,7 +11,6 @@ const useDetectOutsideClick = (
       }
     };
 
-    //delay the event listener to avoid immediate trigger on mount
     const timeoutId = setTimeout(() => {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener(
