@@ -23,17 +23,25 @@ function FileDropzone({
   isUploading,
   progress,
 }: Props) {
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<{
+  file: File;
+  src: string;
+} | null>(null);
 
-  useEffect(() => {
-    if (file?.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    } else {
-      setPreview(null);
-    }
-  }, [file]);
+useEffect(() => {
+  if (!file?.type.startsWith("image/")) return;
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    setPreview({
+      file,
+      src: reader.result as string,
+    });
+  };
+
+  reader.readAsDataURL(file);
+}, [file]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept,
@@ -41,7 +49,9 @@ function FileDropzone({
     onDrop: (accepted, rejected) => {
   console.log("ACCEPTED:", accepted);
   console.log("REJECTED:", rejected);
-  accepted[0] && onFileSelect(accepted[0]);
+  if (accepted[0]) {
+  onFileSelect(accepted[0]);
+}
 },
   });
 
@@ -77,7 +87,7 @@ function FileDropzone({
             <div className="relative h-24 w-40 overflow-hidden rounded-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={preview}
+                src={preview.src}
                 alt="Preview"
                 className="h-full w-full object-cover"
               />
