@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const supabase = await createClient();
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     if (error || !user?.email) {
       return NextResponse.json(
         { error: error?.message || "User not authenticated" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -29,19 +29,18 @@ export async function POST(req: NextRequest) {
         profiles: {
           create: {
             name: "Profile 1",
-            avatar: "/images/netflix-avatar.png",
+            avatar: "/images/netflix--avatar.png",
           },
         },
       },
     });
 
-    return NextResponse.json(dbUser)
-
+    return NextResponse.json(dbUser);
   } catch (error) {
     console.error("Error registering user:", error);
     return NextResponse.json(
       { error: "Failed to register user" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
