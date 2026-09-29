@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Header from "@/components/Header";
 import MaturityBadge from "@/components/movie/MaturityBadge";
 import MoviesRow from "@/components/movie/MoviesRow";
@@ -9,7 +10,7 @@ import useFetchTrendingMovies from "@/hooks/movie/useFetchTrendingMovies";
 import useFetchMyListMovies from "@/hooks/my-list/useFetchMyListMovies";
 import { InfoIcon, PlayIcon, VolumeFullIcon, VolumeOffIcon } from "@/lib/Icons";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
 
 export default function Home() {
   const router = useRouter();
@@ -24,13 +25,6 @@ export default function Home() {
   const { data: myListMovies = [] } = useFetchMyListMovies();
 
   const [isMuted, setIsMuted] = useState(true);
-  const [featuredIndex, setFeaturedIndex] = useState(0);
-
-  useEffect(() => {
-    if (featuredMovies?.length) {
-      setFeaturedIndex(Math.floor(Math.random() * featuredMovies.length));
-    }
-  }, [featuredMovies]);
 
   if (featuredLoading || allMoviesLoading || trendingLoading) {
     return (
@@ -40,7 +34,7 @@ export default function Home() {
     );
   }
 
-  const featured = featuredMovies?.[featuredIndex];
+  const featured = featuredMovies?.[0];
 
   return (
     <div>
