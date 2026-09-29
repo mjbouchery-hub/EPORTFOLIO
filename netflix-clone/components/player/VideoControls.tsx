@@ -10,6 +10,7 @@ import {
   PlayButton,
   SeekButton,
   Slider,
+  Thumbnail,
   VolumeSlider,
   selectTime,
   selectBuffer,
@@ -58,6 +59,8 @@ function VideoControls({ title, thumbnails }: Props) {
   const bufferedPercent = duration > 0 ? (bufferedEnd / duration) * 100 : 0;
 
   const [controlsVisible, setControlsVisible] = React.useState(true);
+  const [previewTime, setPreviewTime] = React.useState(0);
+
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const resetTimer = useCallback(() => {
@@ -121,6 +124,16 @@ function VideoControls({ title, thumbnails }: Props) {
                 value={currentTime}
                 onValueChange={(t) => timeSate?.seek(t)}
                 onValueCommit={(t) => timeSate?.seek(t)}
+                onPointerMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+
+                  const percent = Math.min(
+                    1,
+                    Math.max(0, (e.clientX - rect.left) / rect.width),
+                  );
+
+                  setPreviewTime(percent * duration);
+                }}
                 className="group relative flex items-center w-full h-4 cursor-pointer"
                 style={
                   {
@@ -155,9 +168,13 @@ function VideoControls({ title, thumbnails }: Props) {
                   className="flex flex-col items-center gap-1 opacity-0 data-pointing:opacity-100 transition-opacity duration-150"
                   style={{ bottom: "calc(100% + 8px)" }}
                 >
-                  <Slider.Thumbnail.Root className="rounded overflow-hidden">
-                    <Slider.Thumbnail.Image />
-                  </Slider.Thumbnail.Root>
+                  <Thumbnail.Root
+                    thumbnails={thumbnails}
+                    time={previewTime}
+                    className="w-40 aspect-video rounded overflow-hidden bg-black"
+                  >
+                    <Thumbnail.Image className="w-full h-full object-cover" />
+                  </Thumbnail.Root>
 
                   <Slider.Value
                     type="pointer"
