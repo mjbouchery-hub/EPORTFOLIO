@@ -42,11 +42,12 @@ function Page() {
       <header className="px-14 py-6">
         <Link href={"/"}>
           <Image
-            src={"/images/logo--mjbflix.svg"}
-            alt="Netflix Logo"
-            width={100}
-            height={64}
-            className="object-contain"
+            src="/images/logo--mjbflix.svg"
+            alt="MJBFLIX Logo"
+            width={2172}
+            height={724}
+            className="w-20 md:w-25"
+            style={{ height: "auto" }}
           />
         </Link>
       </header>

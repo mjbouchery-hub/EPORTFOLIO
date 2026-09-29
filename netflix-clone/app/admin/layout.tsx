@@ -31,10 +31,11 @@ export default async function AdminLayout({
           <Link href="/">
             <Image
               src="/images/logo--mjbflix.svg"
-              alt="Netflix"
-              width={100}
-              height={64}
+              alt="MJBFLIX Logo"
+              width={2172}
+              height={724}
               className="w-20 md:w-25"
+              style={{ height: "auto" }}
             />
           </Link>
 

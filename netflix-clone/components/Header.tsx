@@ -29,15 +29,19 @@ const menuItems = [
 
 function Header() {
   const pathname = usePathname();
-  const { activeProfile, setActiveProfile, activeProfileId, clearActiveProfile } =
-    useProfileContext();
+  const {
+    activeProfile,
+    setActiveProfile,
+    activeProfileId,
+    clearActiveProfile,
+  } = useProfileContext();
 
   const { data: profilesData } = useFetchProfiles();
 
-const profiles = React.useMemo(
-  () => (Array.isArray(profilesData) ? profilesData : []),
-  [profilesData],
-);
+  const profiles = React.useMemo(
+    () => (Array.isArray(profilesData) ? profilesData : []),
+    [profilesData],
+  );
 
   const queryClient = useQueryClient();
 
@@ -55,7 +59,13 @@ const profiles = React.useMemo(
 
     const stored = profiles.find((p) => p.id === activeProfileId);
     setActiveProfile(stored ?? profiles[0]);
-  }, [profiles, activeProfile, activeProfileId, setActiveProfile, isSigningOut]);
+  }, [
+    profiles,
+    activeProfile,
+    activeProfileId,
+    setActiveProfile,
+    isSigningOut,
+  ]);
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -85,11 +95,12 @@ const profiles = React.useMemo(
       <div className="flex items-center gap-6">
         <Link href={"/"} className="text-2xl font-bold text-red-600">
           <Image
-            src={"/images/logo--mjbflix.svg"}          
-            alt="Netflix Logo"
-            width={100}
-            height={64}
-            className="w-20 md:w-25 h-auto"
+            src="/images/logo--mjbflix.svg"
+            alt="MJBFLIX Logo"
+            width={2172}
+            height={724}
+            className="w-20 md:w-25"
+            style={{ height: "auto" }}
           />
         </Link>
 
