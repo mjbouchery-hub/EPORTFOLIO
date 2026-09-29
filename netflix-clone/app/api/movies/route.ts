@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(movies);
   } catch (error) {
-    console.log("There was an error fetching movies:");
+    console.error("There was an error fetching movies:", error);
     return NextResponse.json(
       { error: "Failed to fetch movies" },
       { status: 500 },
@@ -77,7 +77,7 @@ export const POST = async (req: NextRequest) => {
         publicId: nanoid(),
       },
     });
-    return NextResponse.json(movie)
+    return NextResponse.json(movie);
   } catch (error) {
     console.error("There was an error creating a movie:", error);
     return NextResponse.json(
