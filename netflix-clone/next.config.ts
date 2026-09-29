@@ -6,7 +6,12 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["100.95.146.114"],
 
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
 };
 
