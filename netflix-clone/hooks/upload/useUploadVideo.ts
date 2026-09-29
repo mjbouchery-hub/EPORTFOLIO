@@ -2,17 +2,17 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-interface UploadResult {
+type UploadVideoResult = {
   url: string;
   publicId: string;
   duration: number | null;
-}
+};
 
 const useUploadVideo = () => {
   const [progress, setProgress] = useState(0);
 
   const mutation = useMutation({
-    mutationFn: async (file: File) => {
+    mutationFn: async (file: File): Promise<UploadVideoResult> => {
       const { data: sig } = await axios.get<{
         signature: string;
         timestamp: number;
@@ -33,7 +33,9 @@ const useUploadVideo = () => {
         formData,
         {
           onUploadProgress: (e) => {
-            if (e.total) setProgress(Math.round((e.loaded / e.total) * 100));
+            if (e.total) {
+              setProgress(Math.round((e.loaded / e.total) * 100));
+            }
           },
         },
       );

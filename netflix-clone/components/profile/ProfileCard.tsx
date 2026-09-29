@@ -1,7 +1,6 @@
 "use client";
 import { Profile } from "@/types/types";
 import React from "react";
-import { Button } from "../ui/button";
 import Image from "next/image";
 import { Pencil } from "lucide-react";
 
