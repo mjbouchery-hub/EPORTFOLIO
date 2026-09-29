@@ -1,11 +1,9 @@
 "use client";
 import { Movie } from "@/types/types";
 import React, { useRef, useState } from "react";
-
 import { motion } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { set } from "zod";
 import { VolumeOffIcon } from "lucide-react";
 import {
   AddIcon,
@@ -29,6 +27,8 @@ import { formatDuration } from "@/lib/utils";
 interface Props {
   movie: Movie;
   priority?: boolean;
+  eager?: boolean;
+  highPriority?: boolean;
 }
 
 const ease = [0.5, 0, 0.1, 1] as const;
@@ -51,7 +51,12 @@ const variants = {
   },
 };
 
-function MovieCard({ movie, priority = false }: Props) {
+function MovieCard({
+  movie,
+  priority = false,
+  eager = priority,
+  highPriority = priority,
+}: Props) {
   const { openModal } = useGlobalContext();
   const { data: myList = [] } = useFetchMyList();
   const { mutate: addToMyList } = useAddToMyList();
@@ -155,23 +160,23 @@ function MovieCard({ movie, priority = false }: Props) {
       ref={ref}
     >
       <Link href={`/watch/${movie.publicId}`} className="h-full">
-  {movie.thumbnailUrl ? (
-    <Image
-      src={movie.thumbnailUrl}
-      alt={movie.title}
-      width={300}
-      height={150}
-      priority={priority}
-      loading={priority ? "eager" : "lazy"}
-      className={`w-full h-full object-cover rounded-sm transition-opacity duration-200 ${
-        isPlaying ? "opacity-0" : "opacity-100"
-      }`}
-    />
-  ) : (
-    <div className="w-full h-full rounded-sm bg-neutral-800 flex items-center justify-center text-white/50 text-sm">
-      No thumbnail
-    </div>
-  )}
+        {movie.thumbnailUrl ? (
+          <Image
+            src={movie.thumbnailUrl}
+            alt={movie.title}
+            width={300}
+            height={150}
+            loading={eager ? "eager" : "lazy"}
+            fetchPriority={highPriority ? "high" : "auto"}
+            className={`w-full h-full object-cover rounded-sm transition-opacity duration-200 ${
+              isPlaying ? "opacity-0" : "opacity-100"
+            }`}
+          />
+        ) : (
+          <div className="w-full h-full rounded-sm bg-neutral-800 flex items-center justify-center text-white/50 text-sm">
+            No thumbnail
+          </div>
+        )}
 
         <video
           ref={videoRef}

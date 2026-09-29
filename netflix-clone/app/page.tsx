@@ -11,7 +11,6 @@ import useFetchMyListMovies from "@/hooks/my-list/useFetchMyListMovies";
 import { InfoIcon, PlayIcon, VolumeFullIcon, VolumeOffIcon } from "@/lib/Icons";
 import { useRouter } from "next/navigation";
 
-
 export default function Home() {
   const router = useRouter();
   const { openModal } = useGlobalContext();
@@ -25,6 +24,12 @@ export default function Home() {
   const { data: myListMovies = [] } = useFetchMyListMovies();
 
   const [isMuted, setIsMuted] = useState(true);
+
+  const firstVisibleThumbnailUrl =
+    trendingMovies[0]?.thumbnailUrl ??
+    allMovies[0]?.thumbnailUrl ??
+    myListMovies[0]?.thumbnailUrl ??
+    null;
 
   if (featuredLoading || allMoviesLoading || trendingLoading) {
     return (
@@ -109,10 +114,23 @@ export default function Home() {
         <MoviesRow
           title="Trending Now"
           movies={trendingMovies}
-          prioritizeFirst
+          eagerThumbnailUrl={firstVisibleThumbnailUrl}
+          highPriorityThumbnailUrl={firstVisibleThumbnailUrl}
         />
-        <MoviesRow title="New on MJBFLIX" movies={allMovies} />
-        <MoviesRow title="My List" movies={myListMovies} />
+
+        <MoviesRow
+          title="New on MJBFLIX"
+          movies={allMovies}
+          eagerThumbnailUrl={firstVisibleThumbnailUrl}
+          highPriorityThumbnailUrl={firstVisibleThumbnailUrl}
+        />
+
+        <MoviesRow
+          title="My List"
+          movies={myListMovies}
+          eagerThumbnailUrl={firstVisibleThumbnailUrl}
+          highPriorityThumbnailUrl={firstVisibleThumbnailUrl}
+        />
       </div>
     </div>
   );

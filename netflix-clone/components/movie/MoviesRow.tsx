@@ -13,7 +13,8 @@ import MovieCard from "./MovieCard";
 interface Props {
   title: string;
   movies: Movie[];
-  prioritizeFirst?: boolean;
+  eagerThumbnailUrl?: string | null;
+  highPriorityThumbnailUrl?: string | null;
 }
 
 function CarouselPreviousConditional() {
@@ -30,7 +31,12 @@ function CarouselNextConditional() {
   return <CarouselNext className="hover:scale-150 duration-200 opacity-90" />;
 }
 
-function MoviesRow({ title, movies, prioritizeFirst = false }: Props) {
+function MoviesRow({
+  title,
+  movies,
+  eagerThumbnailUrl,
+  highPriorityThumbnailUrl,
+}: Props) {
   const safeMovies = Array.isArray(movies) ? movies : [];
 
   if (safeMovies.length === 0) {
@@ -43,14 +49,15 @@ function MoviesRow({ title, movies, prioritizeFirst = false }: Props) {
 
       <Carousel opts={{ align: "start" }} className="ml-4">
         <CarouselContent className="gap-2">
-          {safeMovies.map((movie, index) => (
+          {safeMovies.map((movie) => (
             <CarouselItem
               key={movie.id}
               className="relative basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 pl-0"
             >
               <MovieCard
                 movie={movie}
-                priority={prioritizeFirst && index === 0}
+                eager={movie.thumbnailUrl === eagerThumbnailUrl}
+                highPriority={movie.thumbnailUrl === highPriorityThumbnailUrl}
               />
             </CarouselItem>
           ))}
