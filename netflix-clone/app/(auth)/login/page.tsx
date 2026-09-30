@@ -60,9 +60,17 @@ function Page() {
         return;
       }
 
-      await axios.post("/api/auth/login").catch((err) => {
-        setError(err.response?.data?.message || "Failed to verify login");
-      });
+      try {
+        await axios.post("/api/auth/login");
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data?.error || "Failed to verify login");
+        } else {
+          setError("Failed to verify login");
+        }
+
+        return;
+      }
 
       router.push("/");
     } catch (error) {
