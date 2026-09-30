@@ -29,7 +29,7 @@ model Profile {
   id         String    @id @default(cuid())
   name       String
   avatar     String?   // URL to the avatar image
-  iskids     Boolean   @default(false)
+  isKids     Boolean   @default(false) @map("iskids")
   userId     String    
   createdAt  DateTime  @default(now())
 

@@ -27,7 +27,7 @@ export async function PATCH(
     const body: { name?: string; avatar?: string; isKids?: boolean } =
       await req.json();
 
-    const fields: { name?: string; avatar?: string; iskids?: boolean } = {};
+    const fields: { name?: string; avatar?: string; isKids?: boolean } = {};
 
     if (body.name !== undefined) {
       fields.name = body.name;
@@ -38,7 +38,7 @@ export async function PATCH(
     }
 
     if (body.isKids !== undefined) {
-      fields.iskids = body.isKids;
+      fields.isKids = body.isKids;
     }
 
     const existing = await prisma.profile.findFirst({

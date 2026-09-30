@@ -97,7 +97,7 @@ function ProfileForm({ profile, onDone }: Props) {
         <div>
           <Label htmlFor="kids-toggle">Kids</Label>
           <p className="text-white/50 text-xs mt-1 leading-relaxed">
-            Only see TV shows and movies rated for ages 12 and under.
+            Adds a Kids badge to help identify this profile.
           </p>
         </div>
       </div>

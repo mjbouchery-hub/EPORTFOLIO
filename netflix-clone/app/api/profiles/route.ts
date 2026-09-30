@@ -62,7 +62,7 @@ export const POST = async (req: NextRequest) => {
     const profile = await prisma.profile.create({
       data: {
         name,
-        iskids: isKids,
+        isKids,
         userId: user.id,
         avatar: "/images/netflix--avatar.png",
       },
