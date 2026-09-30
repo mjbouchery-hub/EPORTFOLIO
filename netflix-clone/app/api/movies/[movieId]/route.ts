@@ -1,7 +1,64 @@
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { UpdateMovie } from "@/types/types";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+const nullableHttpUrl = z
+  .url({ protocol: /^https?$/ })
+  .max(2048)
+  .nullable()
+  .optional();
+
+const movieUpdateSchema = z
+  .strictObject({
+    title: z
+      .string()
+      .refine((value) => value.trim().length > 0, "Title cannot be empty")
+      .optional(),
+    description: z
+      .string()
+      .refine((value) => value.trim().length > 0, "Description cannot be empty")
+      .optional(),
+    thumbnailUrl: nullableHttpUrl,
+    trailerUrl: nullableHttpUrl,
+    videoUrl: nullableHttpUrl,
+    cloudinaryId: z.string().trim().min(1).nullable().optional(),
+    duration: z
+      .number()
+      .nonnegative()
+      .transform((value) => Math.round(value))
+      .nullable()
+      .optional(),
+    releaseYear: z
+      .number()
+      .int()
+      .min(1900)
+      .max(new Date().getFullYear() + 5)
+      .nullable()
+      .optional(),
+    maturityRating: z
+      .enum([
+        "NR",
+        "G",
+        "PG",
+        "PG-13",
+        "R",
+        "NC-17",
+        "TV-Y",
+        "TV-Y7",
+        "TV-G",
+        "TV-PG",
+        "TV-14",
+        "TV-MA",
+      ])
+      .nullable()
+      .optional(),
+    isFeatured: z.boolean().optional(),
+    isTrending: z.boolean().optional(),
+  })
+  .refine((fields) => Object.keys(fields).length > 0, {
+    message: "No fields provided for update",
+  });
 
 const getAdminUser = async () => {
   const supabase = await createClient();
@@ -54,18 +111,28 @@ export async function PATCH(
 ) {
   try {
     const { movieId } = await params;
-    const fileds: UpdateMovie = await req.json();
-
-    if (Object.keys(fileds).length === 0) {
-      return NextResponse.json(
-        { error: "No fields provided for update" },
-        { status: 400 },
-      );
-    }
 
     const admin = await getAdminUser();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    let requestBody: unknown;
+    try {
+      requestBody = await req.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const validation = movieUpdateSchema.safeParse(requestBody);
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          error: "Invalid update data",
+          issues: validation.error.issues,
+        },
+        { status: 400 },
+      );
     }
 
     const movie = await prisma.movie.findUnique({
@@ -78,7 +145,7 @@ export async function PATCH(
 
     const updatedMovie = await prisma.movie.update({
       where: { id: movieId },
-      data: { ...fileds },
+      data: validation.data,
     });
 
     return NextResponse.json(updatedMovie);
