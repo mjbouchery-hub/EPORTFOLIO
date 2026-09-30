@@ -31,12 +31,14 @@ function Page() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setConfirmationMessage("");
 
     const result = schema.safeParse({ email, password, confirmPassword });
     if (!result.success) {
@@ -76,14 +78,32 @@ function Page() {
       }
 
       if (data.session) {
-        // Add the supabase to our table
-        await axios.post("/api/auth/register").catch((err) => {
-          console.log("Error registering user in database", err);
-        });
+        try {
+          await axios.post("/api/auth/register");
+        } catch (provisioningError) {
+          console.log(
+            "Error registering user in database",
+            provisioningError,
+          );
+          await supabase.auth.signOut({ scope: "local" });
+          setError(
+            "Your account was created, but setup could not be completed. Please sign in to try again.",
+          );
+          return;
+        }
 
         router.push("/");
         return;
       }
+
+      if (data.user) {
+        setConfirmationMessage(
+          "Check your email for a confirmation link before signing in. If you already have an account, sign in instead.",
+        );
+        return;
+      }
+
+      setError("Registration could not be completed. Please try again.");
     } catch (error) {
       console.log("There was an error creating user", error);
       setError("An error occurred during registration");
@@ -154,8 +174,16 @@ function Page() {
           </div>
 
           {error && <p className="text-red-500 text-xs">{error}</p>}
+          {confirmationMessage && (
+            <p className="text-green-400 text-sm">{confirmationMessage}</p>
+          )}
 
-          <Button type="submit" variant={"brand-primary"} className="h-12">
+          <Button
+            type="submit"
+            variant={"brand-primary"}
+            className="h-12"
+            disabled={loading}
+          >
             {loading ? "Registering..." : "Register"}
           </Button>
         </form>
