@@ -20,6 +20,7 @@ const movieUpdateSchema = z
       .refine((value) => value.trim().length > 0, "Description cannot be empty")
       .optional(),
     thumbnailUrl: nullableHttpUrl,
+    thumbnailCloudinaryId: z.string().trim().min(1).nullable().optional(),
     trailerUrl: nullableHttpUrl,
     videoUrl: nullableHttpUrl,
     cloudinaryId: z.string().trim().min(1).nullable().optional(),
@@ -56,6 +57,14 @@ const movieUpdateSchema = z
     isFeatured: z.boolean().optional(),
     isTrending: z.boolean().optional(),
   })
+  .refine(
+    (fields) => "thumbnailUrl" in fields === "thumbnailCloudinaryId" in fields,
+    {
+      message:
+        "thumbnailUrl and thumbnailCloudinaryId must be provided together",
+      path: ["thumbnailCloudinaryId"],
+    },
+  )
   .refine((fields) => Object.keys(fields).length > 0, {
     message: "No fields provided for update",
   });

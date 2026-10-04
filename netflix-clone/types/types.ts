@@ -9,6 +9,7 @@ export interface Movie {
   title: string;
   description: string;
   thumbnailUrl: string | null;
+  thumbnailCloudinaryId: string | null;
   backdropUrl: string | null;
   trailerUrl: string | null;
   videoUrl: string | null;
@@ -70,6 +71,7 @@ export interface MovieUpdateData {
   title?: string;
   description?: string;
   thumbnailUrl?: string;
+  thumbnailCloudinaryId?: string | null;
   isTrending?: boolean;
   videoUrl?: string;
   duration?: number | null;

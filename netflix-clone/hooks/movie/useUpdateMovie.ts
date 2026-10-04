@@ -7,6 +7,7 @@ interface UpdateMoviePayload {
   title?: string;
   description?: string;
   thumbnailUrl?: string;
+  thumbnailCloudinaryId?: string | null;
   videoUrl?: string;
   cloudinaryId?: string;
   duration?: number | null;

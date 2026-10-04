@@ -83,10 +83,13 @@ function FormMovieUpdate({ handleSubmit, movie }: Prop) {
     const previousThumbnailUrl = currentThumbnailUrl;
 
     try {
-      const { url } = await uploadImage(file);
+      const { url, publicId } = await uploadImage(file);
       setCurrentThumbnailUrl(url);
 
-      await handleSubmit({ thumbnailUrl: url });
+      await handleSubmit({
+        thumbnailUrl: url,
+        thumbnailCloudinaryId: publicId,
+      });
 
       toast.success("Thumbnail updated!");
     } catch (error) {
