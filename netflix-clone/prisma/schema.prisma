@@ -43,9 +43,9 @@ model Movie {
   title            String
   description      String
   thumbnailUrl     String?
-  thumbnailCloudinaryId String?  // Cloudinary public ID for the thumbnail image
+  thumbnailCloudinaryId String?
   isTrending       Boolean  @default(false)
-  trailerUrl       String?  
+  trailerUrl       String? 
   videoUrl         String?    // URL to the full movie video
   cloudinaryId     String?  // Cloudinary public ID for the movie video
   duration         Int?      // Duration in minutes
