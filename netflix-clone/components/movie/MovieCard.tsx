@@ -149,7 +149,9 @@ function MovieCard({
 
   return (
     <motion.div
-      className={`u-movie-card-shadow h-full relative group cursor-pointer bg-[#181818] rounded-sm ${isElevated ? "z-10" : "z-0"}`}
+      className={`u-movie-card-shadow aspect-video relative group cursor-pointer bg-[#181818] rounded-sm ${
+        isElevated ? "z-10" : "z-0"
+      }`}
       style={{ transformOrigin }}
       data-elevated={isElevated || undefined}
       variants={variants}
@@ -159,7 +161,7 @@ function MovieCard({
       onHoverEnd={handleHoverEnd}
       ref={ref}
     >
-      <Link href={`/watch/${movie.publicId}`} className="h-full">
+      <Link href={`/watch/${movie.publicId}`} className="block h-full">
         {movie.thumbnailUrl ? (
           <Image
             src={movie.thumbnailUrl}
