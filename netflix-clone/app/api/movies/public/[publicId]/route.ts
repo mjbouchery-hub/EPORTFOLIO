@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { publicId: string } },
+    { params }: { params: Promise<{ publicId: string }> },
 ) {
 
     try {
@@ -19,7 +19,7 @@ export async function GET(
                 { status: 404 },
             );
         }
-        
+        return NextResponse.json(movie);
     }catch (error) {
         console.error("Error fetching movie details:", error);
         return NextResponse.json(
