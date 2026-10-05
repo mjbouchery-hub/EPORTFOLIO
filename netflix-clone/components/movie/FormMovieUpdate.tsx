@@ -29,10 +29,15 @@ import toast from "react-hot-toast";
 
 interface Prop {
   handleSubmit: (data: MovieUpdateData) => Promise<void>;
+  onDetailsSaved?: () => void;
   movie?: Movie;
 }
 
-function FormMovieUpdate({ handleSubmit, movie }: Prop) {
+function FormMovieUpdate({
+  handleSubmit,
+  onDetailsSaved,
+  movie,
+}: Prop) {
   const {
     mutateAsync: uploadImage,
     isPending: isUploadingImage,
@@ -160,6 +165,7 @@ function FormMovieUpdate({ handleSubmit, movie }: Prop) {
             });
 
             toast.success("Movie details updated!");
+            onDetailsSaved?.();
           } catch (error) {
             console.error("Error updating movie:", error);
             toast.error("Failed to update movie.");

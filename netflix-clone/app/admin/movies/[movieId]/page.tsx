@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import FormMovieUpdate from "@/components/movie/FormMovieUpdate";
 import useUpdateMovie from "@/hooks/movie/useUpdateMovie";
 import useFetchMovie from "@/hooks/movie/useFetchMovie";
@@ -12,31 +13,30 @@ interface Props {
 }
 
 function Page({ params }: Props) {
+  const router = useRouter();
   const { movieId } = React.use(params);
   const { mutateAsync: updateMovie } = useUpdateMovie();
   const { data: movie, isLoading } = useFetchMovie(movieId);
 
-const handleMovieUpdate = async (data: MovieUpdateData): Promise<void> => {
-  const { releaseYear, rating, ...rest } = data;
+  const handleMovieUpdate = async (data: MovieUpdateData): Promise<void> => {
+    const { releaseYear, rating, ...rest } = data;
 
-  const parsedReleaseYear =
-    releaseYear !== undefined &&
-    releaseYear !== null &&
-    `${releaseYear}`.trim() !== ""
-      ? Number(releaseYear)
-      : undefined;
+    const parsedReleaseYear =
+      releaseYear !== undefined &&
+      releaseYear !== null &&
+      `${releaseYear}`.trim() !== ""
+        ? Number(releaseYear)
+        : undefined;
 
-  await updateMovie({
-    id: movieId,
-    ...rest,
-    ...(parsedReleaseYear !== undefined
-      ? { releaseYear: parsedReleaseYear }
-      : {}),
-    ...(rating !== undefined
-      ? { maturityRating: rating }
-      : {}),
-  });
-};
+    await updateMovie({
+      id: movieId,
+      ...rest,
+      ...(parsedReleaseYear !== undefined
+        ? { releaseYear: parsedReleaseYear }
+        : {}),
+      ...(rating !== undefined ? { maturityRating: rating } : {}),
+    });
+  };
 
   if (isLoading) {
     return (
@@ -63,7 +63,11 @@ const handleMovieUpdate = async (data: MovieUpdateData): Promise<void> => {
       </nav>
 
       <div className="flex justify-center items-center">
-        <FormMovieUpdate handleSubmit={handleMovieUpdate} movie={movie} />
+        <FormMovieUpdate
+          handleSubmit={handleMovieUpdate}
+          onDetailsSaved={() => router.push("/admin")}
+          movie={movie}
+        />
       </div>
     </div>
   );
