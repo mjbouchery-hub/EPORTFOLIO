@@ -22,21 +22,26 @@ const useRemoveFromMyList = () => {
       queryClient.setQueryData<Movie[]>(key, (old = []) =>
         old.filter((m) => m.id !== movieId),
       );
-      return { previous };
+      return { previous, key };
     },
 
     onError: (_err, _movieId, context) => {
-      if (context?.previous !== undefined) {
-        queryClient.setQueryData(
-          myListQueryKey(activeProfileId ?? ""),
-          context.previous,
-        );
+      if (!context) return;
+
+      // If logout cleared this query while the mutation was in flight,
+      // do not recreate old-account cache data.
+      if (queryClient.getQueryState(context.key) === undefined) return;
+
+      if (context.previous !== undefined) {
+        queryClient.setQueryData(context.key, context.previous);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: myListQueryKey(activeProfileId ?? ""),
-      });
+    onSettled: (_data, _error, _movieId, context) => {
+      if (!context) return;
+
+      if (queryClient.getQueryState(context.key) === undefined) return;
+
+      queryClient.invalidateQueries({ queryKey: context.key });
     },
   });
 };

@@ -21,19 +21,25 @@ const useAddToMyList = () => {
       const previous = queryClient.getQueryData<Movie[]>(key);
       queryClient.setQueryData<Movie[]>(key, (old = []) => [...old, movie]);
 
-      return { previous };
+      return { previous, key };
     },
     onError: (_err, _movie, context) => {
-      if (context?.previous !== undefined) {
-        queryClient.setQueryData<Movie[]>(
-          myListQueryKey(activeProfileId ?? ""),
-          context.previous,
-        );
+      if (!context) return;
+
+      // If logout cleared this query while the mutation was in flight,
+      // do not recreate old-account cache data.
+      if (queryClient.getQueryState(context.key) === undefined) return;
+
+      if (context.previous !== undefined) {
+        queryClient.setQueryData<Movie[]>(context.key, context.previous);
       }
     },
-    onSettled: () => {
-      const key = myListQueryKey(activeProfileId ?? "");
-      queryClient.invalidateQueries({ queryKey: key });
+    onSettled: (_data, _error, _movie, context) => {
+      if (!context) return;
+
+      if (queryClient.getQueryState(context.key) === undefined) return;
+
+      queryClient.invalidateQueries({ queryKey: context.key });
     },
   });
 };
