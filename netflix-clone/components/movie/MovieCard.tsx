@@ -109,6 +109,13 @@ function MovieCard({
               setIsPlaying(true);
             })
             .catch((error) => {
+              if (
+                error instanceof DOMException &&
+                error.name === "AbortError"
+              ) {
+                return;
+              }
+
               console.error("Error playing video:", error);
             });
         }
@@ -127,6 +134,10 @@ function MovieCard({
           video.currentTime = 0;
         })
         .catch((error) => {
+          if (error instanceof DOMException && error.name === "AbortError") {
+            return;
+          }
+
           console.error("Error pausing video:", error);
         });
     }
