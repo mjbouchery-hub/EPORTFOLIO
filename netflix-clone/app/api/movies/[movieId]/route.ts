@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { deleteCloudinaryAsset } from "@/lib/cloudinary";
 
 const nullableHttpUrl = z
   .url({ protocol: /^https?$/ })
@@ -57,16 +58,20 @@ const movieUpdateSchema = z
     isFeatured: z.boolean().optional(),
     isTrending: z.boolean().optional(),
   })
+  .refine((fields) => Object.keys(fields).length > 0, {
+    message: "No fields provided for update",
+  })
   .refine(
     (fields) => "thumbnailUrl" in fields === "thumbnailCloudinaryId" in fields,
     {
       message:
-        "thumbnailUrl and thumbnailCloudinaryId must be provided together",
+        "thumbnailUrl and thumbnailCloudinaryId must be updated together",
       path: ["thumbnailCloudinaryId"],
     },
   )
-  .refine((fields) => Object.keys(fields).length > 0, {
-    message: "No fields provided for update",
+  .refine((fields) => "videoUrl" in fields === "cloudinaryId" in fields, {
+    message: "videoUrl and cloudinaryId must be updated together",
+    path: ["cloudinaryId"],
   });
 
 const getAdminUser = async () => {
@@ -157,6 +162,36 @@ export async function PATCH(
       data: validation.data,
     });
 
+    if (
+      validation.data.thumbnailCloudinaryId !== undefined &&
+      movie.thumbnailCloudinaryId &&
+      validation.data.thumbnailCloudinaryId !== movie.thumbnailCloudinaryId
+    ) {
+      try {
+        await deleteCloudinaryAsset(
+          movie.thumbnailCloudinaryId,
+          "image",
+          "upload",
+        );
+      } catch (error) {
+        console.error("Failed to delete old thumbnail from Cloudinary:", error);
+      }
+    }
+    if (
+      validation.data.cloudinaryId !== undefined &&
+      movie.cloudinaryId &&
+      validation.data.cloudinaryId !== movie.cloudinaryId
+    ) {
+      try {
+        await deleteCloudinaryAsset(
+          movie.cloudinaryId,
+          "video",
+          "authenticated",
+        );
+      } catch (error) {
+        console.error("Failed to delete old video from Cloudinary:", error);
+      }
+    }
     return NextResponse.json(updatedMovie);
   } catch (error) {
     console.error("Error updating movie details:", error);
