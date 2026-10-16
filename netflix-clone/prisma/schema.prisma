@@ -14,57 +14,70 @@ datasource db {
 
 
 model User {
-  id         String   @id @default(cuid())
-  supabaseUserId String   @unique
-  email      String   @unique
-  role       String   @default("USER")
+  id                     String   @id @default(cuid())
+  supabaseUserId         String   @unique
+  email                  String   @unique
+  role                   String   @default("USER")
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
-  profiles  Profile[]
+  profiles               Profile[]
 }
 
 model Profile {
-  id         String    @id @default(cuid())
-  name       String
-  avatar     String?   // URL to the avatar image
-  isKids     Boolean   @default(false) @map("iskids")
-  userId     String    
-  createdAt  DateTime  @default(now())
+  id                     String    @id @default(cuid())
+  name                   String
+  avatar                 String?   // URL to the avatar image
+  isKids                 Boolean   @default(false) @map("iskids")
+  userId                 String    
+  createdAt              DateTime  @default(now())
 
-  user       User      @relation(fields: [userId], references: [id])
-  myList     MyList[]
+  user                   User      @relation(fields: [userId], references: [id])
+  myList                 MyList[]
 }
 
 model Movie {
-  id               String   @id @default(cuid())
-  publicId         String   @unique // Unique identifier for the movie, can be used for public references
-  title            String
-  description      String
-  thumbnailUrl     String?
-  thumbnailCloudinaryId String?
-  isTrending       Boolean  @default(false)
-  trailerUrl       String? 
-  videoUrl         String?    // URL to the full movie video
-  cloudinaryId     String?  // Cloudinary public ID for the movie video
-  duration         Int?      // Duration in minutes
-  releaseYear      Int?      // Year of release
-  maturityRating   String?    @default("NR") // e.g., G, PG, PG-13, R, NC-17
-  isFeatured       Boolean   @default(false)
-  createdAt        DateTime  @default(now())
+  id                     String   @id @default(cuid())
+  publicId               String   @unique // Unique identifier for the movie, can be used for public references
+  title                  String
+  description            String
+  thumbnailUrl           String?
+  thumbnailCloudinaryId  String?
+  isTrending             Boolean  @default(false)
+  trailerUrl             String? 
+  videoUrl               String?    // URL to the full movie video
+  cloudinaryId           String?  // Cloudinary public ID for the movie video
+  duration               Int?      // Duration in minutes
+  releaseYear            Int?      // Year of release
+  maturityRating         String?    @default("NR") // e.g., G, PG, PG-13, R, NC-17
+  isFeatured             Boolean   @default(false)
+  createdAt              DateTime  @default(now())
 
-  myList           MyList[]
+  myList                 MyList[]
 }
 
 model MyList {
-  id         String   @id @default(cuid())
-  profileId  String
-  movieId    String
-  addedAt    DateTime @default(now())
+  id                     String   @id @default(cuid())
+  profileId              String
+  movieId                String
+  addedAt                DateTime @default(now())
 
-  profiles    Profile  @relation(fields: [profileId], references: [id])
-  movie      Movie    @relation(fields: [movieId], references: [id])
+  profiles               Profile  @relation(fields: [profileId], references: [id])
+  movie                  Movie    @relation(fields: [movieId], references: [id])
 
   @@unique([profileId, movieId]) // Ensure a user can't add the same movie to their list multiple times
+}
+
+model CloudinaryCleanupJob {
+  id                     String   @id @default(cuid())
+  publicId               String
+  resourceType           String
+  deliveryType           String
+  attempts               Int      @default(0)
+  lastError              String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@unique([publicId, resourceType, deliveryType])
 }
