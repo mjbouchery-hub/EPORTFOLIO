@@ -9,8 +9,13 @@ const useDeleteMovie = () => {
     mutationFn: async (movieId: string) => {
       await axios.delete(`/api/movies/${movieId}`);
     },
-    onSuccess: () => {
+   onSuccess: (_data, movieId) => {
   queryClient.invalidateQueries({ queryKey: ["movies"] });
+  queryClient.invalidateQueries({ queryKey: ["featuredMovies"] });
+  queryClient.invalidateQueries({ queryKey: ["trendingMovies"] });
+  queryClient.invalidateQueries({ queryKey: ["movie", movieId] });
+  queryClient.invalidateQueries({ queryKey: ["my-list"] });
+
   toast.success("Movie deleted.");
 },
 onError: (error) => {
