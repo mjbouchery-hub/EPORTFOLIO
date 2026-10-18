@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import type { Profile } from "@/types/types";
+import toast from "react-hot-toast";
 
 interface UpdateProfileInput {
   id: string;
@@ -22,6 +23,11 @@ const useUpdateProfile = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profiles"] });
+      toast.success("Profile updated successfully.");
+    },
+    onError: (error) => {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile.");
     },
   });
 };

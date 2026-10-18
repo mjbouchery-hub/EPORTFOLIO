@@ -1,6 +1,7 @@
 import { Profile } from "@/types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface CreateProfileInput {
   name: string;
@@ -17,6 +18,11 @@ const useCreateProfile = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profiles"] });
+      toast.success("Profile created successfully.");
+    },
+    onError: (error) => {
+      console.error("Error creating profile:", error);
+      toast.error("Failed to create profile.");
     },
   });
 };

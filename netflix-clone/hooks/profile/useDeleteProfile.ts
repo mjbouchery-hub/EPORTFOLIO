@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useProfileContext } from "@/context/profileContext";
 import type { Profile } from "@/types/types";
+import toast from "react-hot-toast";
 
 const useDeleteProfile = () => {
   const queryClient = useQueryClient();
@@ -24,6 +25,11 @@ const useDeleteProfile = () => {
       }
 
       await queryClient.invalidateQueries({ queryKey: ["profiles"] });
+      toast.success("Profile deleted.");
+    },
+    onError: (error) => {
+      console.error("Error deleting profile:", error);
+      toast.error("Failed to delete profile.");
     },
   });
 };

@@ -53,9 +53,16 @@ function ProfileForm({ profile, onDone }: Props) {
   };
 
   const handleDelete = () => {
-    if (!profile) return;
-    deleteProfile(profile.id, { onSuccess: onDone });
-  };
+  if (!profile) return;
+
+  const confirmed = window.confirm(
+    `Delete profile "${profile.name}"? Its My List will also be removed. This cannot be undone.`,
+  );
+
+  if (!confirmed) return;
+
+  deleteProfile(profile.id, { onSuccess: onDone });
+};
 
   return (
     <div className="flex flex-col items-center w-full max-w-sm gap-8">
