@@ -6,63 +6,70 @@ import { Button } from "../ui/button";
 import useCreateMovie from "@/hooks/movie/useCreateMovie";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/context/globalContext";
+import toast from "react-hot-toast";
 
 function ModalMovies() {
-        const { mutate: createMovie } = useCreateMovie();
-        const { closeModal } = useGlobalContext(); // Access the closeModal function from the global context
-        
-        const router = useRouter();
+  const { mutate: createMovie, isPending } = useCreateMovie();
+  const { closeModal } = useGlobalContext(); // Access the closeModal function from the global context
 
-        const [title, setTitle] = React.useState("");
-        const [description, setDescription] = React.useState("");
+  const router = useRouter();
 
-        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-          try {
-            createMovie({ title, description } , {
-              onSuccess: (movie) => {
-                router.push(`/admin/movies/${movie.id}`);
-                closeModal(); // Close the modal after successful creation
-              },
-            });
-          } catch (error) {
-            console.log("Error adding movie:", error);
-          }  
-        };
+  createMovie(
+    { title, description },
+    {
+      onSuccess: (movie) => {
+        router.push(`/admin/movies/${movie.id}`);
+        closeModal();
+      },
+      onError: (error) => {
+        console.error("Error adding movie:", error);
+        toast.error("Failed to add movie.");
+      },
+    },
+  );
+};
 
-    return <Modal>
-        <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold mb-4">Add Movie</h1>
-        
+  return (
+    <Modal>
+      <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <h1 className="text-2xl font-bold mb-4">Add Movie</h1>
+
         <div className="flex flex-col gap-2">
           <Label htmlFor="title">Title</Label>
-          <Input 
-          type="text" 
-          id="title"  
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter movie title"
-          className="border border-gray-300 rounded-md p-2" />
+          <Input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter movie title"
+            className="border border-gray-300 rounded-md p-2"
+          />
         </div>
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="description">Description</Label>
-          <Input 
-            type="text" 
-            id="description" 
+          <Input
+            type="text"
+            id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter movie description"
-            className="border border-gray-300 rounded-md p-2" />
+            className="border border-gray-300 rounded-md p-2"
+          />
         </div>
 
-        <Button type="submit" variant={"brand-primary"} className="h-12">
-          Add Movie
+        <Button type="submit" variant={"brand-primary"} className="h-12" disabled={isPending}>
+          {isPending ? "Adding..." : "Add Movie"}
         </Button>
       </form>
-    </Modal>;
+    </Modal>
+  );
 }
 
 export default ModalMovies;
