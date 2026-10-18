@@ -105,7 +105,7 @@ export default function Home() {
       </div>
 
       <div
-        className="-mt-26 md:-mt-32 lg:-mt-62 overflow-x-clip pt-8 px-4 md:px-14 relative z-20 flex flex-col gap-10"
+        className="-mt-26 md:-mt-32 overflow-x-clip pt-8 px-4 md:px-14 relative z-20 flex flex-col gap-10"
         style={{
           background:
             "linear-gradient(to bottom, transparent, var(--color-brand-background) 10rem)",
