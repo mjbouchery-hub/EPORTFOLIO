@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { forbidden, unauthorized } from "next/navigation";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,14 +15,14 @@ export default async function AdminLayout({
     data: { user: authUser },
   } = await supabase.auth.getUser();
 
-  if (!authUser) unauthorized();
+  if (!authUser) redirect("/login");
 
   const user = await prisma.user.findUnique({
     where: { supabaseUserId: authUser.id },
     select: { role: true },
   });
 
-  if (user?.role !== "ADMIN") forbidden();
+  if (user?.role !== "ADMIN") redirect("/");
 
   return (
     <div className="min-h-screen bg-[#141414]">
