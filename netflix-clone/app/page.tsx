@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div>
       <Header />
-
+      {featured && (
       <div className="relative w-full -mt-17.5">
         <video
           autoPlay
@@ -103,6 +103,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      )}
 
       <div
         className="-mt-26 md:-mt-32 overflow-x-clip pt-8 px-4 md:px-14 relative z-20 flex flex-col gap-10"
