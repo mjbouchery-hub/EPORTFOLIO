@@ -63,11 +63,11 @@ export const POST = async (req: NextRequest) => {
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: authUser.email || undefined },
+      where: { supabaseUserId: authUser.id },
     });
 
     if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const movie = await prisma.movie.create({

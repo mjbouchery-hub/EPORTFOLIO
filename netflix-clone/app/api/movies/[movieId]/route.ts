@@ -74,7 +74,7 @@ const movieUpdateSchema = z
     path: ["cloudinaryId"],
   });
 
-const getAdminUser = async () => {
+const getAuthenticatedUser = async () => {
   const supabase = await createClient();
 
   const {
@@ -84,13 +84,14 @@ const getAdminUser = async () => {
 
   if (error || !authUser) {
     console.error("Error fetching authenticated user:", error);
-    return null;
+    return { authenticated: false, user: null };
   }
+
   const user = await prisma.user.findUnique({
-    where: { email: authUser.email || undefined },
+    where: { supabaseUserId: authUser.id },
   });
 
-  return user?.role === "ADMIN" ? user : null;
+  return { authenticated: true, user };
 };
 
 export async function GET(
@@ -126,9 +127,14 @@ export async function PATCH(
   try {
     const { movieId } = await params;
 
-    const admin = await getAdminUser();
-    if (!admin) {
+    const { authenticated, user: admin } = await getAuthenticatedUser();
+
+    if (!authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!admin || admin.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     let requestBody: unknown;
@@ -209,9 +215,14 @@ export async function DELETE(
 ) {
   try {
     const { movieId } = await params;
-    const admin = await getAdminUser();
-    if (!admin) {
+    const { authenticated, user: admin } = await getAuthenticatedUser();
+
+    if (!authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!admin || admin.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const movie = await prisma.movie.findUnique({
