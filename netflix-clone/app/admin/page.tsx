@@ -11,7 +11,7 @@ import React from "react";
 function Page() {
   const { openModal } = useGlobalContext();
   const { data: movies, isLoading } = useFetchMovies();
-  const { mutate: deleteMovie } = useDeleteMovie();
+  const { mutate: deleteMovie, isPending: isDeleting } = useDeleteMovie();
 
   const router = useRouter();
 
@@ -142,8 +142,16 @@ function Page() {
                           size="xs"
                           variant="destructive"
                           className="flex-1 h-7 text-sm"
+                          disabled={isDeleting}
                           onClick={(e) => {
                             e.stopPropagation();
+
+                            const confirmed = window.confirm(
+                              `Delete "${movie.title}"? This cannot be undone.`,
+                            );
+
+                            if (!confirmed) return;
+
                             deleteMovie(movie.id);
                           }}
                         >
