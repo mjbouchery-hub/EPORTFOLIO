@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import axios from "axios";
@@ -22,6 +22,19 @@ type FieldErrors = Partial<Record<keyof z.infer<typeof schema>, string>>;
 function Page() {
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
+
+  useEffect(() => {
+    const redirectIfAuthenticated = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        router.replace("/");
+      }
+    };
+
+    void redirectIfAuthenticated();
+  }, [router, supabase]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,6 +76,8 @@ function Page() {
       try {
         await axios.post("/api/auth/login");
       } catch (err) {
+        await supabase.auth.signOut();
+
         if (axios.isAxiosError(err)) {
           setError(err.response?.data?.error || "Failed to verify login");
         } else {
