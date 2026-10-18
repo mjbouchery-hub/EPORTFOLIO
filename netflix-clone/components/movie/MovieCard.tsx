@@ -172,7 +172,11 @@ function MovieCard({
       onHoverEnd={handleHoverEnd}
       ref={ref}
     >
-      <Link href={`/watch/${movie.publicId}`} className="block h-full">
+      <Link
+        href={`/watch/${movie.publicId}`}
+        className="block h-full"
+        aria-label={`Watch ${movie.title}`}
+      >
         {movie.thumbnailUrl ? (
           <Image
             src={movie.thumbnailUrl}
@@ -193,92 +197,93 @@ function MovieCard({
 
         <video
           ref={videoRef}
-          className={`absolute top-0 left-0 w-full aspect-video object-cover rounded-t-sm pointer-events-none transition-opacity duration-200 ${isPlaying ? "opacity-100" : "opacity-0"}`}
+          className={`absolute top-0 left-0 w-full aspect-video object-cover rounded-t-sm pointer-events-none transition-opacity duration-200 ${
+            isPlaying ? "opacity-100" : "opacity-0"
+          }`}
           src={movie.videoUrl ?? undefined}
+          preload="none"
           muted
           loop
         />
+      </Link>
 
-        {isPlaying && (
-          <button
-            className="absolute top-2 right-2 z-10 w-7 h-7 flex items-center justify-center rounded-full border border-white/60 hover:border-white bg-black/40 text-white"
-            onClick={handleMuteToggle}
-          >
-            {isMuted ? (
-              <VolumeOffIcon size={14} />
-            ) : (
-              <VolumeFullIcon size={14} />
-            )}
-          </button>
-        )}
+      {isPlaying && (
+        <button
+          className="absolute top-2 right-2 z-10 w-7 h-7 flex items-center justify-center rounded-full border border-white/60 hover:border-white bg-black/40 text-white"
+          onClick={handleMuteToggle}
+        >
+          {isMuted ? <VolumeOffIcon size={14} /> : <VolumeFullIcon size={14} />}
+        </button>
+      )}
 
-        <div className="absolute left-0 right-0 top-full bg-[#181818] rounded-b-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-0 group-hover:delay-[400ms]">
-          <div className="p-4 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1">
-                <button className="w-8 h-8 flex items-center justify-center rounded-full bg-white hover:bg-white/80 text-black">
-                  <PlayButtonIcon size={20} className="ml-0.5" />
-                </button>
-                <Tooltip delayDuration={400}>
-                  <TooltipTrigger asChild>
-                    <button
-                      className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-white border border-white/50 hover:border-white"
-                      onClick={handleMyListToggle}
-                    >
-                      {isInMyList ? (
-                        <CheckIcon size={20} />
-                      ) : (
-                        <AddIcon size={20} />
-                      )}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="top"
-                    className="py-2 px-4 bg-white text-black text-base font-medium"
-                  >
-                    {isInMyList ? "Remove from My List" : "Add to My List"}
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-
+      <div className="absolute left-0 right-0 top-full bg-[#181818] rounded-b-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-0 group-hover:delay-[400ms]">
+        <div className="p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Link
+                href={`/watch/${movie.publicId}`}
+                aria-label={`Play ${movie.title}`}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white hover:bg-white/80 text-black"
+              >
+                <PlayButtonIcon size={20} className="ml-0.5" />
+              </Link>
               <Tooltip delayDuration={400}>
                 <TooltipTrigger asChild>
                   <button
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-white border border-white/50 hover:border-white"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openModal("movie-info", movie);
-                    }}
+                    onClick={handleMyListToggle}
                   >
-                    <ChevronDownIcon className="mt-0.5" size={20} />
+                    {isInMyList ? (
+                      <CheckIcon size={20} />
+                    ) : (
+                      <AddIcon size={20} />
+                    )}
                   </button>
                 </TooltipTrigger>
                 <TooltipContent
                   side="top"
                   className="py-2 px-4 bg-white text-black text-base font-medium"
                 >
-                  More Info
+                  {isInMyList ? "Remove from My List" : "Add to My List"}
                 </TooltipContent>
               </Tooltip>
             </div>
 
-            {/* Metadata */}
-            <div className="flex items-center gap-2">
-              <MaturityBadge rating={movie.maturityRating!} size="xs" />
-              {movie.releaseYear && (
-                <span className="text-white/70 text-xs">
-                  {movie.releaseYear}
-                </span>
-              )}
-              {movie.duration && (
-                <span className="text-white/70 text-xs">
-                  {formatDuration(movie.duration)}
-                </span>
-              )}
-            </div>
+            <Tooltip delayDuration={400}>
+              <TooltipTrigger asChild>
+                <button
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-white border border-white/50 hover:border-white"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openModal("movie-info", movie);
+                  }}
+                >
+                  <ChevronDownIcon className="mt-0.5" size={20} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="py-2 px-4 bg-white text-black text-base font-medium"
+              >
+                More Info
+              </TooltipContent>
+            </Tooltip>
+          </div>
+
+          {/* Metadata */}
+          <div className="flex items-center gap-2">
+            <MaturityBadge rating={movie.maturityRating!} size="xs" />
+            {movie.releaseYear && (
+              <span className="text-white/70 text-xs">{movie.releaseYear}</span>
+            )}
+            {movie.duration && (
+              <span className="text-white/70 text-xs">
+                {formatDuration(movie.duration)}
+              </span>
+            )}
           </div>
         </div>
-      </Link>
+      </div>
     </motion.div>
   );
 }
