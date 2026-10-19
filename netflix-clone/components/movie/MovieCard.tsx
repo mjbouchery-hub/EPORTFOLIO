@@ -23,6 +23,7 @@ import useAddToMyList from "@/hooks/my-list/useAddToMyList";
 import useRemoveFromMyList from "@/hooks/my-list/useRemoveFromMyList";
 import MaturityBadge from "./MaturityBadge";
 import { formatDuration } from "@/lib/utils";
+import { useProfileContext } from "@/context/profileContext";
 
 interface Props {
   movie: Movie;
@@ -78,6 +79,7 @@ function MovieCard({
   const [isMuted, setIsMuted] = useState(true);
   const [transformOrigin, setTransformOrigin] = useState("50% 50%");
 
+  const { activeProfileId } = useProfileContext();
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const videoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const playPromise = useRef<Promise<void> | null>(null);
@@ -231,6 +233,7 @@ function MovieCard({
                 <TooltipTrigger asChild>
                   <button
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-white border border-white/50 hover:border-white"
+                    disabled={!activeProfileId}
                     onClick={handleMyListToggle}
                   >
                     {isInMyList ? (

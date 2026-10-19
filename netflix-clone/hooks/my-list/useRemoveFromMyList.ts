@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { myListQueryKey } from "./useFetchMyList";
 import { Movie } from "@/types/types";
+import toast from "react-hot-toast";
 
 const useRemoveFromMyList = () => {
   const queryClient = useQueryClient();
@@ -16,6 +17,9 @@ const useRemoveFromMyList = () => {
     },
 
     onMutate: async (movieId) => {
+      if (!activeProfileId) {
+        throw new Error("Select a profile before changing My List.");
+      }
       const key = myListQueryKey(activeProfileId ?? "");
       await queryClient.cancelQueries({ queryKey: key });
       const previous = queryClient.getQueryData<Movie[]>(key);
@@ -26,7 +30,10 @@ const useRemoveFromMyList = () => {
     },
 
     onError: (_err, _movieId, context) => {
-      if (!context) return;
+      if (!context) {
+        toast.error("Select a profile before changing My List.");
+        return;
+      }
 
       // If logout cleared this query while the mutation was in flight,
       // do not recreate old-account cache data.
