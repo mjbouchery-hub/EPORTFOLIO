@@ -1,19 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function Nav({ setMovies, setLoading, setError }) {
   const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState("The Matrix");
-  async function handleSearch(event) {
-    event.preventDefault();
+  const [searchTerm, setSearchTerm] = useState("The Matrix");
+  const activeRequest = useRef(null);
 
-    const query = searchTerm.trim();
-    if (!query) return;
-    navigate("/");
-
-    setLoading(true);
-    setError("");
-    setMovies([]);
+  const loadMovies = useCallback(async (query) => {
+    activeRequest.current?.abort();
+    const controller = new AbortController();
+    activeRequest.current = controller;
 
     try {
       const params = new URLSearchParams({
@@ -21,25 +17,44 @@ function Nav({ setMovies, setLoading, setError }) {
         s: query,
         type: "movie",
       });
-
-      const response = await fetch(`https://www.omdbapi.com/?${params}`);
-
+      const response = await fetch(`https://www.omdbapi.com/?${params}`, {
+        signal: controller.signal,
+      });
       if (!response.ok) {
         throw new Error("Unable to reach the movie service.");
       }
-
       const data = await response.json();
-
       if (data.Response === "False") {
         throw new Error(data.Error || "No movies found.");
       }
-
-      setMovies(data.Search ?? []);
+      if (!controller.signal.aborted) {
+        setMovies(data.Search ?? []);
+      }
     } catch (error) {
-      setError(error.message || "Unable to load movies. Please try again.");
+      if (!controller.signal.aborted) {
+        setError(error.message || "Unable to load movies. Please try again.");
+      }
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
     }
+  }, [setMovies, setLoading, setError]);
+
+  useEffect(() => {
+    loadMovies("The Matrix");
+    return () => activeRequest.current?.abort();
+  }, [loadMovies]);
+
+  function handleSearch(event) {
+    event.preventDefault();
+    const query = searchTerm.trim();
+    if (!query) return;
+    setLoading(true);
+    setError("");
+    setMovies([]);
+    navigate("/");
+    loadMovies(query);
   }
   return (
     <>
